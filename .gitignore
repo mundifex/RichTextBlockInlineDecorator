@@ -46,6 +46,7 @@ Build/Switch/FileOpenOrder/**
 *.xcworkspace/
 *.VC.opendb
 .vs/
+.vsconfig
 
 # Temporary VS files
 /enc_temp_folder
