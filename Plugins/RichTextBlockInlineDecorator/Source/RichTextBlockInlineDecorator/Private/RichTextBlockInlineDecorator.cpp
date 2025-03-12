@@ -9,7 +9,7 @@
 class FDefaultRichTextDecorator : public ITextDecorator
 {
 public:
-	FDefaultRichTextDecorator(URichTextBlockDecorator* Decorator, const FSlateFontInfo& DefaultFont, const FLinearColor& DefaultColor);
+	FDefaultRichTextDecorator(URichTextBlockDecorator* Decorator, const FTextBlockStyle& DefaultTextStyle);
 
 	virtual ~FDefaultRichTextDecorator();
 
@@ -63,9 +63,9 @@ private:
 /////////////////////////////////////////////////////
 // FDefaultRichTextDecorator
 
-FDefaultRichTextDecorator::FDefaultRichTextDecorator(URichTextBlockDecorator* InDecorator, const FSlateFontInfo& InDefaultFont, const FLinearColor& InDefaultColor)
-	: DefaultFont(InDefaultFont)
-	, DefaultColor(InDefaultColor)
+FDefaultRichTextDecorator::FDefaultRichTextDecorator(URichTextBlockDecorator* InDecorator, const FTextBlockStyle& DefaultTextStyle)
+	: DefaultFont(DefaultTextStyle.Font)
+	, DefaultColor(DefaultTextStyle.ColorAndOpacity.GetSpecifiedColor())
 	, Decorator(InDecorator)
 {
 }
@@ -172,9 +172,7 @@ URichTextBlockInlineDecorator::URichTextBlockInlineDecorator(const FObjectInitia
 
 TSharedPtr<ITextDecorator> URichTextBlockInlineDecorator::CreateDecorator(URichTextBlock* InOwner)
 {
-	FSlateFontInfo DefaultFont = InOwner->GetCurrentDefaultTextStyle().Font;
-	FLinearColor DefaultColor = InOwner->GetCurrentDefaultTextStyle().ColorAndOpacity.GetSpecifiedColor();
-	return MakeShareable(new FDefaultRichTextDecorator(this, DefaultFont, DefaultColor));
+	return MakeShareable(new FDefaultRichTextDecorator(this, InOwner->GetCurrentDefaultTextStyle()));
 }
 
 /////////////////////////////////////////////////////
